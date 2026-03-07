@@ -1,0 +1,270 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+  --bg-color: #FAFAFA; /* Warm off-white */
+  --surface-light: #EBEBEB; /* Card background light */
+  --surface-dark: #0A0A0A; /* Card background dark */
+  
+  --text-main: #121212;
+  --text-secondary: #71717A;
+  --text-inverse: #FFFFFF;
+  --text-inverse-secondary: #A1A1AA;
+  
+  --accent-orange: #F97316;
+  --accent-yellow: #EAB308;
+  
+  --radius-xl: 24px;
+  --radius-lg: 16px;
+  --radius-md: 12px;
+  
+  --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+  --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+
+  --transition-fast: 0.15s ease;
+  --transition-smooth: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background-color: #E75924; /* Orange background from mockup to frame the app */
+  color: var(--text-main);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+/* App Container */
+.app-container {
+  width: 100%;
+  max-width: 1200px;
+  min-height: fit-content;
+  margin: 2rem auto;
+  background-color: var(--bg-color);
+  border-radius: 30px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Animations */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.animate-blink {
+  animation: blink 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+/* Scrollbar hiding for cards */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Custom Range Slider */
+input[type=range] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  background: transparent;
+}
+input[type=range]:focus {
+  outline: none;
+}
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 24px;
+  width: 24px;
+  border-radius: 50%;
+  background: var(--text-main);
+  cursor: pointer;
+  margin-top: -10px;
+  box-shadow: 0 0 0 4px rgba(0,0,0,0.05);
+  transition: all 0.2s ease;
+}
+input[type=range]::-webkit-slider-thumb:hover {
+  transform: scale(1.1);
+}
+input[type=range]::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 4px;
+  cursor: pointer;
+  background: rgba(0,0,0,0.1);
+  border-radius: 4px;
+}
+
+/* Layout Structure */
+.mc-container {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: end;
+  row-gap: 1rem;
+}
+.mc-time { grid-column: 1 / -1; justify-self: center; margin: 0; display: flex; align-items: baseline; }
+.mc-offset { grid-column: 1; justify-self: start; }
+.mc-datesun { grid-column: 2; justify-self: center; display: flex; flex-direction: row; align-items: center; justify-content: center; gap: 0.2rem; flex-wrap: wrap;}
+.mc-sun { font-size: 0.9rem; color: var(--text-main); }
+.mc-date { color: var(--text-secondary); font-size: 0.9rem; margin-right: 0.3rem; }
+.mc-togglers { grid-column: 3; justify-self: end; }
+.mc-hr { grid-column: 1 / -1; width: 100%; border: none; border-top: 1px solid #E4E4E5; margin: 1rem 0; }
+.mc-title { grid-column: 1 / -1; justify-self: start; }
+.mc-title h1 { font-size: 2.5rem; font-weight: 400; line-height: 1.1; margin: 0; }
+.mc-time-text { font-size: clamp(4rem, 12vw, 10rem); font-weight: 500; line-height: 1; letter-spacing: -0.04em; font-variant-numeric: tabular-nums; }
+
+.schedule-bar-container {
+  display: flex; align-items: center; gap: 1rem;
+  background-color: var(--surface-light);
+  padding: 0.5rem 1.5rem; border-radius: 100px;
+  margin-bottom: 0.5rem; color: var(--text-main);
+}
+.schedule-bar-left { display: flex; align-items: center; gap: 0.8rem; font-weight: 500; width: 180px; }
+.schedule-bar-slider-container { position: relative; flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 0.5rem; height: auto; min-height: 48px; }
+.schedule-current-label {
+  font-size: 0.75rem; color: var(--text-secondary); font-weight: 500;
+  text-align: center; pointer-events: none; z-index: 2;
+}
+.schedule-slider-wrap {
+  position: relative; width: 100%; display: flex; align-items: center; height: 24px;
+}
+.schedule-slider-notch {
+  position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+  width: 2px; height: 16px; background-color: var(--text-secondary);
+  border-radius: 2px; pointer-events: none; z-index: 0;
+}
+.schedule-bar-right { display: flex; align-items: center; gap: 1rem; width: 150px; justify-content: flex-end; }
+.schedule-reset-btn {
+  background: var(--text-main); color: var(--text-inverse); border: none;
+  padding: 0.4rem 1rem; border-radius: 40px; font-size: 0.85rem;
+  display: flex; align-items: center; gap: 0.4rem; cursor: pointer; transition: var(--transition-fast);
+}
+
+.add-city-top { display: flex; justify-content: flex-end; margin-bottom: 1rem; }
+.add-city-top button, .add-city-bottom button {
+  display: flex; align-items: center; gap: 0.5rem; background: none; border: none; color: var(--text-secondary); cursor: pointer; font-size: 0.9rem; font-weight: 500;
+}
+.add-city-bottom { display: none; }
+.city-card-scroll { display: flex; gap: 1rem; overflow-x: auto; padding-bottom: 0.5rem; width: 100%; }
+.city-card-item {
+  display: flex; flex-direction: column; justify-content: space-between;
+  height: 150px; min-width: 220px;
+  border-radius: var(--radius-xl); padding: 1.25rem; transition: var(--transition-smooth);
+}
+.city-card-item-time { font-size: 2.5rem; font-weight: 400; line-height: 1; }
+
+@media (max-width: 768px) {
+  body {
+    background-color: #E75924;
+  }
+
+  .app-container {
+    margin: 1rem auto;
+    width: 100%;
+    max-width: calc(100vw - 2rem);
+    padding: 1.5rem 1rem;
+    border-radius: var(--radius-xl);
+    min-height: calc(100vh - 2rem);
+    box-shadow: var(--shadow-md);
+  }
+
+  /* Schedule Bar Mobile */
+  .schedule-bar-container {
+    background-color: transparent;
+    padding: 0;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+  }
+  .schedule-bar-left {
+    background-color: var(--surface-light);
+    width: 100%;
+    justify-content: center;
+    padding: 0.8rem;
+    border-radius: 100px;
+  }
+  .schedule-bar-slider-container {
+    background-color: var(--surface-light);
+    width: 100%;
+    padding: 0.75rem 1.5rem;
+    height: auto;
+    min-height: 56px;
+    border-radius: 100px;
+    gap: 0.4rem;
+  }
+  .schedule-current-label {
+    font-size: 0.65rem;
+  }
+  .schedule-bar-right { width: 100%; justify-content: center; }
+
+  /* Main Clock Mobile */
+  .mc-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .mc-title { order: 1; text-align: center; justify-self: center; margin-bottom: 0px; }
+  .mc-title h1 { font-size: 1.8rem; font-weight: 500; }
+  .mc-title br { display: none; }
+  .mc-time { order: 2; margin: 0; max-width: 100%; }
+  .mc-time-text { font-size: clamp(3rem, 16vw, 6rem); white-space: nowrap; }
+  .mc-time .am-pm { font-size: 1.5rem !important; }
+  .mc-datesun { order: 3; margin-top: 0.5rem; display: flex; flex-wrap: wrap; justify-content: center; gap: 0.2rem; }
+  .mc-date { color: var(--text-main); font-weight: 400; margin-right: 0.2rem; }
+  .mc-sun { font-size: 0.85rem; }
+  .mc-togglers { order: 4; margin-top: 1rem; justify-self: center; }
+  .mc-offset { order: 5; margin-top: 0.5rem; }
+  .mc-hr { order: 6; margin: 1.5rem 0; }
+
+  /* City Cards Mobile */
+  .add-city-top { display: none; }
+  .add-city-bottom {
+    display: flex; justify-content: center; margin-top: 1rem;
+  }
+  .add-city-bottom button {
+    background: var(--surface-light);
+    width: 100%; justify-content: center; padding: 1rem; border-radius: 100px;
+    color: var(--text-main); font-weight: 500; font-size: 1rem;
+  }
+  .city-card-scroll {
+     flex-direction: column; overflow-x: hidden; padding-left: 0 !important; padding-right: 0 !important;
+     gap: 0.8rem; scroll-snap-type: none; padding-bottom: 0;
+  }
+  .city-card-item {
+     height: auto; min-width: 100%; width: 100%;
+     padding: 1rem 1.25rem;
+     scroll-snap-align: none;
+     border-radius: var(--radius-lg);
+  }
+  .city-card-item-time { font-size: 2.2rem; }
+}
