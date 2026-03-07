@@ -7,7 +7,6 @@ import { formatTimezoneOffset, getCityDisplayName } from '../utils/formatters';
 export default function CityCard({ zone, isActive, onClick, onRemove, offsetMinutes = 0, use24HourTime }) {
   const time = useTime(zone, offsetMinutes);
   const cityName = getCityDisplayName(zone);
-  const [isHovered, setIsHovered] = useState(false);
   
   // Calculate offset from UTC
   const offset = time.offset / 60;
@@ -21,8 +20,6 @@ export default function CityCard({ zone, isActive, onClick, onRemove, offsetMinu
   return (
     <div className="city-card-item"
       onClick={() => onClick(zone)}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
       style={{
         backgroundColor: bg, color: color,
         cursor: 'pointer',
@@ -35,24 +32,22 @@ export default function CityCard({ zone, isActive, onClick, onRemove, offsetMinu
         <span style={{ fontWeight: '500', fontSize: '1.1rem', paddingRight: '0.5rem' }}>{cityName}</span>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
           <span style={{ color: secondaryColor, fontSize: '0.9rem' }}>{formatTimezoneOffset(offset)}</span>
-          <button 
-            onClick={(e) => { e.stopPropagation(); onRemove && onRemove(); }}
-            style={{
-              background: isActive ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)', 
-              border: 'none', borderRadius: '50%',
-              width: '24px', height: '24px', display: 'flex', 
-              alignItems: 'center', justifyContent: 'center',
-              cursor: 'pointer', color: 'inherit',
-              transition: 'var(--transition-fast)',
-              opacity: (isHovered || isActive) && onRemove ? 1 : 0,
-              pointerEvents: (isHovered || isActive) && onRemove ? 'auto' : 'none',
-              marginTop: '-4px', marginRight: '-8px'
-            }}
-            onMouseEnter={(e) => e.target.style.background = isActive ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.1)'}
-            onMouseLeave={(e) => e.target.style.background = isActive ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)'}
-          >
-            <X size={14} style={{ pointerEvents: 'none' }} />
-          </button>
+          {onRemove && (
+            <button 
+              onClick={(e) => { e.stopPropagation(); onRemove(); }}
+              className={`city-remove-btn ${isActive ? 'active' : ''}`}
+              style={{
+                border: 'none', borderRadius: '50%',
+                width: '24px', height: '24px', display: 'flex', 
+                alignItems: 'center', justifyContent: 'center',
+                cursor: 'pointer', color: 'inherit',
+                transition: 'var(--transition-fast)',
+                marginTop: '-4px', marginRight: '-8px'
+              }}
+            >
+              <X size={14} style={{ pointerEvents: 'none' }} />
+            </button>
+          )}
         </div>
       </div>
 
