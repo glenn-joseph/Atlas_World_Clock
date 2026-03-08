@@ -9,7 +9,7 @@ function App() {
   const { savedZones, activeZone, setActiveZone, addZone, removeZone, reorderZone } = useSavedTimezones();
   const [offsetMinutes, setOffsetMinutes] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [use24HourTime, setUse24HourTime] = useState(true);
+  const [use24HourTime, setUse24HourTime] = useState(false);
   
   return (
     <div className="app-container" style={{ display: 'flex', flexDirection: 'column' }}>

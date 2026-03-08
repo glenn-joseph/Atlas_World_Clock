@@ -8,10 +8,13 @@ export function useTime(timezone = 'local', offsetMinutes = 0) {
   });
 
   useEffect(() => {
-    const timer = setInterval(() => {
+    const updateTime = () => {
       const base = timezone === 'local' ? DateTime.now() : DateTime.now().setZone(timezone);
       setTime(base.plus({ minutes: offsetMinutes }));
-    }, 1000);
+    };
+    
+    updateTime();
+    const timer = setInterval(updateTime, 1000);
 
     return () => clearInterval(timer);
   }, [timezone, offsetMinutes]);
