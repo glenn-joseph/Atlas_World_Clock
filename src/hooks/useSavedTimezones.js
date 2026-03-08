@@ -1,11 +1,16 @@
 import { useState, useEffect } from 'react';
 import { DateTime } from 'luxon';
 
-const STORAGE_KEY = 'world_clock_zones_v2';
+const STORAGE_KEY = 'world_clock_zones_v3';
 
 export function useSavedTimezones() {
   const localZone = DateTime.local().zoneName;
-  const defaultZones = Array.from(new Set([localZone, 'America/New_York', 'Europe/Paris', 'Asia/Tokyo']));
+  const defaultZones = [
+    { id: 'local_zone_active', zone: localZone, name: 'Local Time' },
+    { id: 'new_york_usa', zone: 'America/New_York', name: 'New York, USA' },
+    { id: 'paris_france', zone: 'Europe/Paris', name: 'Paris, France' },
+    { id: 'tokyo_japan', zone: 'Asia/Tokyo', name: 'Tokyo, Japan' }
+  ];
 
   const [savedZones, setSavedZones] = useState(() => {
     try {
@@ -16,12 +21,12 @@ export function useSavedTimezones() {
     }
   });
 
-  const [activeZone, setActiveZone] = useState(() => {
+  const [activeZoneId, setActiveZoneId] = useState(() => {
     try {
       const stored = localStorage.getItem(STORAGE_KEY + '_active');
-      return stored || localZone;
+      return stored || defaultZones[0].id;
     } catch {
-      return localZone;
+      return defaultZones[0].id;
     }
   });
 
@@ -30,19 +35,20 @@ export function useSavedTimezones() {
   }, [savedZones]);
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY + '_active', activeZone);
-  }, [activeZone]);
+    localStorage.setItem(STORAGE_KEY + '_active', activeZoneId);
+  }, [activeZoneId]);
 
-  const addZone = (zone) => {
-    if (!savedZones.includes(zone)) {
-      setSavedZones(prev => [...prev, zone]);
+  const addZone = (cityObj) => {
+    // Only verify ID to allow multiple instances of the same timezone (like two same cities or cities in same timezone)
+    if (!savedZones.find(z => z.id === cityObj.id)) {
+      setSavedZones(prev => [...prev, cityObj]);
     }
   };
 
-  const removeZone = (zone) => {
-    setSavedZones(prev => prev.filter(z => z !== zone));
-    if (activeZone === zone && savedZones.length > 1) {
-      setActiveZone(savedZones[0] === zone ? savedZones[1] : savedZones[0]);
+  const removeZone = (id) => {
+    setSavedZones(prev => prev.filter(z => z.id !== id));
+    if (activeZoneId === id && savedZones.length > 1) {
+      setActiveZoneId(savedZones[0].id === id ? savedZones[1].id : savedZones[0].id);
     }
   };
 
@@ -54,6 +60,8 @@ export function useSavedTimezones() {
       return result;
     });
   };
+  
+  const activeZoneInfo = savedZones.find(z => z.id === activeZoneId) || savedZones[0];
 
-  return { savedZones, activeZone, setActiveZone, addZone, removeZone, reorderZone };
+  return { savedZones, activeZoneId, setActiveZoneId, activeZoneInfo, addZone, removeZone, reorderZone };
 }

@@ -6,7 +6,7 @@ import ScheduleBar from './components/ScheduleBar';
 import AddCityModal from './components/AddCityModal';
 
 function App() {
-  const { savedZones, activeZone, setActiveZone, addZone, removeZone, reorderZone } = useSavedTimezones();
+  const { savedZones, activeZoneId, setActiveZoneId, activeZoneInfo, addZone, removeZone, reorderZone } = useSavedTimezones();
   const [offsetMinutes, setOffsetMinutes] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [use24HourTime, setUse24HourTime] = useState(false);
@@ -15,7 +15,7 @@ function App() {
     <div className="app-container" style={{ display: 'flex', flexDirection: 'column' }}>
       <ScheduleBar offsetMinutes={offsetMinutes} setOffsetMinutes={setOffsetMinutes} />
       <MainClock 
-        activeZone={activeZone} 
+        activeZoneInfo={activeZoneInfo} 
         offsetMinutes={offsetMinutes} 
         setOffsetMinutes={setOffsetMinutes}
         use24HourTime={use24HourTime}
@@ -23,8 +23,8 @@ function App() {
       />
       <CityCardList 
         savedZones={savedZones} 
-        activeZone={activeZone} 
-        onSelectZone={setActiveZone} 
+        activeZoneId={activeZoneId} 
+        onSelectZone={setActiveZoneId} 
         offsetMinutes={offsetMinutes}
         use24HourTime={use24HourTime}
         onAddCity={() => setIsModalOpen(true)}

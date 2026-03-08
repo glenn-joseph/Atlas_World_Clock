@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect, useCallback } from 'react';
 import CityCard from './CityCard';
 import { Plus } from 'lucide-react';
 
-export default function CityCardList({ savedZones, activeZone, onSelectZone, offsetMinutes = 0, onAddCity, use24HourTime, onRemoveZone, onReorderZone }) {
+export default function CityCardList({ savedZones, activeZoneId, onSelectZone, offsetMinutes = 0, onAddCity, use24HourTime, onRemoveZone, onReorderZone }) {
   const [dragState, setDragState] = useState({
     isDragging: false,
     idx: null,
@@ -120,9 +120,9 @@ export default function CityCardList({ savedZones, activeZone, onSelectZone, off
       </div>
       
       <div className="city-card-scroll">
-        {savedZones.map((zone, index) => (
+        {savedZones.map((cityObj, index) => (
           <div
-            key={zone}
+            key={cityObj.id}
             ref={el => itemRefs.current[index] = el}
             onPointerDown={(e) => handlePointerDown(e, index)}
             onPointerMove={(e) => handlePointerMove(e, index)}
@@ -142,12 +142,12 @@ export default function CityCardList({ savedZones, activeZone, onSelectZone, off
             }}
           >
             <CityCard 
-              zone={zone} 
-              isActive={zone === activeZone} 
-              onClick={onSelectZone} 
+              cityObj={cityObj} 
+              isActive={cityObj.id === activeZoneId} 
+              onClick={() => onSelectZone(cityObj.id)} 
               offsetMinutes={offsetMinutes}
               use24HourTime={use24HourTime}
-              onRemove={() => onRemoveZone && onRemoveZone(zone)}
+              onRemove={() => onRemoveZone && onRemoveZone(cityObj.id)}
             />
           </div>
         ))}

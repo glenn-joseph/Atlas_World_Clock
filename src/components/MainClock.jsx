@@ -88,16 +88,16 @@ const EditableTimeSpan = ({ value, unit, onChange }) => {
   );
 };
 
-export default function MainClock({ activeZone, offsetMinutes = 0, setOffsetMinutes, use24HourTime, onToggle24Hour }) {
-  const time = useTime(activeZone, offsetMinutes);
-  const details = getSunriseSunsetData(activeZone);
-  const cityInfo = getCityDisplayName(activeZone);
+export default function MainClock({ activeZoneInfo, offsetMinutes = 0, setOffsetMinutes, use24HourTime, onToggle24Hour }) {
+  const time = useTime(activeZoneInfo.zone, offsetMinutes);
+  const details = getSunriseSunsetData(activeZoneInfo.zone);
+  const cityInfo = activeZoneInfo.name;
 
   const hours = time.toFormat(use24HourTime ? 'HH' : 'hh');
   const ampm = !use24HourTime ? time.toFormat('a') : '';
 
   const handleTimeChange = (unit, newValue) => {
-    const base = activeZone === 'local' ? DateTime.now() : DateTime.now().setZone(activeZone);
+    const base = activeZoneInfo.zone === 'local' ? DateTime.now() : DateTime.now().setZone(activeZoneInfo.zone);
     let newTime = time;
     let val = parseInt(newValue, 10);
     if (isNaN(val)) return;
@@ -117,7 +117,7 @@ export default function MainClock({ activeZone, offsetMinutes = 0, setOffsetMinu
   };
 
   const handleAmPmToggle = () => {
-    const base = activeZone === 'local' ? DateTime.now() : DateTime.now().setZone(activeZone);
+    const base = activeZoneInfo.zone === 'local' ? DateTime.now() : DateTime.now().setZone(activeZoneInfo.zone);
     let newTime;
     if (time.hour >= 12) {
       newTime = time.minus({ hours: 12 });
@@ -200,7 +200,7 @@ export default function MainClock({ activeZone, offsetMinutes = 0, setOffsetMinu
 
       {/* 1. Title Container */}
       <div className="mc-title">
-        <h1>{cityInfo}, <br/>{activeZone.split('/')[0]}</h1>
+        <h1>{cityInfo}, <br/>{activeZoneInfo.zone.split('/')[0]}</h1>
       </div>
     </div>
   );

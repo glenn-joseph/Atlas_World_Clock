@@ -2,31 +2,31 @@ import React, { useState } from 'react';
 import { X, Search } from 'lucide-react';
 
 const COMMON_CITIES = [
-  { name: 'London, UK', zone: 'Europe/London' },
-  { name: 'New York, USA', zone: 'America/New_York' },
-  { name: 'Tokyo, Japan', zone: 'Asia/Tokyo' },
-  { name: 'Paris, France', zone: 'Europe/Paris' },
-  { name: 'Singapore, Singapore', zone: 'Asia/Singapore' },
-  { name: 'Hong Kong, China', zone: 'Asia/Hong_Kong' },
-  { name: 'Los Angeles, USA', zone: 'America/Los_Angeles' },
-  { name: 'Dubai, UAE', zone: 'Asia/Dubai' },
-  { name: 'Mumbai, India', zone: 'Asia/Kolkata' },
-  { name: 'Sydney, Australia', zone: 'Australia/Sydney' },
-  { name: 'Berlin, Germany', zone: 'Europe/Berlin' },
-  { name: 'Shanghai, China', zone: 'Asia/Shanghai' },
-  { name: 'San Francisco, USA', zone: 'America/Los_Angeles' },
-  { name: 'Toronto, Canada', zone: 'America/Toronto' },
-  { name: 'Bangkok, Thailand', zone: 'Asia/Bangkok' },
-  { name: 'Seoul, South Korea', zone: 'Asia/Seoul' },
-  { name: 'Rome, Italy', zone: 'Europe/Rome' },
-  { name: 'Madrid, Spain', zone: 'Europe/Madrid' },
-  { name: 'Mexico City, Mexico', zone: 'America/Mexico_City' },
-  { name: 'Moscow, Russia', zone: 'Europe/Moscow' },
-  { name: 'New Delhi, India', zone: 'Asia/Kolkata' },
-  { name: 'Istanbul, Turkey', zone: 'Europe/Istanbul' },
-  { name: 'Amsterdam, Netherlands', zone: 'Europe/Amsterdam' },
-  { name: 'Chicago, USA', zone: 'America/Chicago' },
-  { name: 'Sao Paulo, Brazil', zone: 'America/Sao_Paulo' }
+  { id: 'london_uk', name: 'London, UK', zone: 'Europe/London' },
+  { id: 'new_york_usa', name: 'New York, USA', zone: 'America/New_York' },
+  { id: 'tokyo_japan', name: 'Tokyo, Japan', zone: 'Asia/Tokyo' },
+  { id: 'paris_france', name: 'Paris, France', zone: 'Europe/Paris' },
+  { id: 'singapore', name: 'Singapore, Singapore', zone: 'Asia/Singapore' },
+  { id: 'hong_kong', name: 'Hong Kong, China', zone: 'Asia/Hong_Kong' },
+  { id: 'los_angeles_usa', name: 'Los Angeles, USA', zone: 'America/Los_Angeles' },
+  { id: 'dubai_uae', name: 'Dubai, UAE', zone: 'Asia/Dubai' },
+  { id: 'mumbai_india', name: 'Mumbai, India', zone: 'Asia/Kolkata' },
+  { id: 'sydney_au', name: 'Sydney, Australia', zone: 'Australia/Sydney' },
+  { id: 'berlin_germany', name: 'Berlin, Germany', zone: 'Europe/Berlin' },
+  { id: 'shanghai_china', name: 'Shanghai, China', zone: 'Asia/Shanghai' },
+  { id: 'san_francisco_usa', name: 'San Francisco, USA', zone: 'America/Los_Angeles' },
+  { id: 'toronto_canada', name: 'Toronto, Canada', zone: 'America/Toronto' },
+  { id: 'bangkok_thailand', name: 'Bangkok, Thailand', zone: 'Asia/Bangkok' },
+  { id: 'seoul_kr', name: 'Seoul, South Korea', zone: 'Asia/Seoul' },
+  { id: 'rome_italy', name: 'Rome, Italy', zone: 'Europe/Rome' },
+  { id: 'madrid_spain', name: 'Madrid, Spain', zone: 'Europe/Madrid' },
+  { id: 'mexico_city', name: 'Mexico City, Mexico', zone: 'America/Mexico_City' },
+  { id: 'moscow_russia', name: 'Moscow, Russia', zone: 'Europe/Moscow' },
+  { id: 'new_delhi_india', name: 'New Delhi, India', zone: 'Asia/Kolkata' },
+  { id: 'istanbul_turkey', name: 'Istanbul, Turkey', zone: 'Europe/Istanbul' },
+  { id: 'amsterdam_nl', name: 'Amsterdam, Netherlands', zone: 'Europe/Amsterdam' },
+  { id: 'chicago_usa', name: 'Chicago, USA', zone: 'America/Chicago' },
+  { id: 'sao_paulo_brazil', name: 'Sao Paulo, Brazil', zone: 'America/Sao_Paulo' }
 ];
 
 export default function AddCityModal({ onClose, onAdd }) {
@@ -79,7 +79,7 @@ export default function AddCityModal({ onClose, onAdd }) {
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', maxHeight: '300px', overflowY: 'auto' }}>
           {filtered.map(city => (
             <button 
-              key={city.zone}
+              key={city.id}
               onClick={() => { onAdd(city.zone); onClose(); }}
               style={{
                 display: 'flex', justifyContent: 'space-between', alignItems: 'center',

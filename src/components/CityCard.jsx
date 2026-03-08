@@ -4,9 +4,9 @@ import { DateTime } from 'luxon';
 import { Sun, Moon, X } from 'lucide-react';
 import { formatTimezoneOffset, getCityDisplayName } from '../utils/formatters';
 
-export default function CityCard({ zone, isActive, onClick, onRemove, offsetMinutes = 0, use24HourTime }) {
-  const time = useTime(zone, offsetMinutes);
-  const cityName = getCityDisplayName(zone);
+export default function CityCard({ cityObj, isActive, onClick, onRemove, offsetMinutes = 0, use24HourTime }) {
+  const time = useTime(cityObj.zone, offsetMinutes);
+  const cityName = cityObj.name;
   
   // Calculate offset from UTC
   const offset = time.offset / 60;
