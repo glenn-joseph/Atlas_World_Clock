@@ -8,16 +8,6 @@
   </head>
   <body>
     <div id="root"></div>
-    <!-- Polyfill for HTML5 drag-and-drop on mobile/touch devices -->
-    <script src="https://cdn.jsdelivr.net/npm/mobile-drag-drop@2.3.0-rc.2/index.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/mobile-drag-drop@2.3.0-rc.2/scroll-behaviour.min.js"></script>
-    <script>
-      MobileDragDrop.polyfill({
-        dragImageTranslateOverride: MobileDragDrop.scrollBehaviourDragImageTranslateOverride,
-        holdToDrag: 300 // require holding for 300ms to start dragging as user requested
-      });
-      document.addEventListener("touchmove", function() {}, {passive: false}); // recommended by the library
-    </script>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
