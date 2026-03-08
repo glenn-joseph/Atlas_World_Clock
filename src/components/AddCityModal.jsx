@@ -2,12 +2,31 @@ import React, { useState } from 'react';
 import { X, Search } from 'lucide-react';
 
 const COMMON_CITIES = [
-  { name: 'Tokyo, Japan', zone: 'Asia/Tokyo' },
-  { name: 'New Delhi, India', zone: 'Asia/Kolkata' },
   { name: 'London, UK', zone: 'Europe/London' },
+  { name: 'New York, USA', zone: 'America/New_York' },
+  { name: 'Tokyo, Japan', zone: 'Asia/Tokyo' },
+  { name: 'Paris, France', zone: 'Europe/Paris' },
+  { name: 'Singapore, Singapore', zone: 'Asia/Singapore' },
+  { name: 'Hong Kong, China', zone: 'Asia/Hong_Kong' },
+  { name: 'Los Angeles, USA', zone: 'America/Los_Angeles' },
   { name: 'Dubai, UAE', zone: 'Asia/Dubai' },
+  { name: 'Mumbai, India', zone: 'Asia/Kolkata' },
   { name: 'Sydney, Australia', zone: 'Australia/Sydney' },
-  { name: 'San Francisco, USA', zone: 'America/Los_Angeles' }
+  { name: 'Berlin, Germany', zone: 'Europe/Berlin' },
+  { name: 'Shanghai, China', zone: 'Asia/Shanghai' },
+  { name: 'San Francisco, USA', zone: 'America/Los_Angeles' },
+  { name: 'Toronto, Canada', zone: 'America/Toronto' },
+  { name: 'Bangkok, Thailand', zone: 'Asia/Bangkok' },
+  { name: 'Seoul, South Korea', zone: 'Asia/Seoul' },
+  { name: 'Rome, Italy', zone: 'Europe/Rome' },
+  { name: 'Madrid, Spain', zone: 'Europe/Madrid' },
+  { name: 'Mexico City, Mexico', zone: 'America/Mexico_City' },
+  { name: 'Moscow, Russia', zone: 'Europe/Moscow' },
+  { name: 'New Delhi, India', zone: 'Asia/Kolkata' },
+  { name: 'Istanbul, Turkey', zone: 'Europe/Istanbul' },
+  { name: 'Amsterdam, Netherlands', zone: 'Europe/Amsterdam' },
+  { name: 'Chicago, USA', zone: 'America/Chicago' },
+  { name: 'Sao Paulo, Brazil', zone: 'America/Sao_Paulo' }
 ];
 
 export default function AddCityModal({ onClose, onAdd }) {
