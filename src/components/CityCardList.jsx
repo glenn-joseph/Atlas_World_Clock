@@ -2,13 +2,26 @@ import React, { useState, useRef, useEffect, useCallback } from 'react';
 import CityCard from './CityCard';
 import { Plus } from 'lucide-react';
 
+function useIsVerticalLayout() {
+  const [isVertical, setIsVertical] = useState(() => window.innerWidth <= 768);
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 768px)');
+    const handler = (e) => setIsVertical(e.matches);
+    mq.addEventListener('change', handler);
+    return () => mq.removeEventListener('change', handler);
+  }, []);
+  return isVertical;
+}
+
 export default function CityCardList({ savedZones, activeZoneId, onSelectZone, offsetMinutes = 0, onAddCity, use24HourTime, onRemoveZone, onReorderZone }) {
+  const isVertical = useIsVerticalLayout();
+
   const [dragState, setDragState] = useState({
     isDragging: false,
     idx: null,
     hoverIdx: null,
-    offsetY: 0,
-    itemHeight: 0
+    dragOffset: 0,
+    itemSize: 0
   });
 
   const timerRef = useRef(null);
@@ -37,23 +50,35 @@ export default function CityCardList({ savedZones, activeZoneId, onSelectZone, o
     
     e.currentTarget.setPointerCapture(e.pointerId);
 
+    const holdDuration = e.pointerType === 'mouse' ? 0 : 300;
+
     timerRef.current = setTimeout(() => {
       const rect = itemRefs.current[index]?.getBoundingClientRect();
       let gap = 16;
       if (itemRefs.current[0] && itemRefs.current[1]) {
-        gap = itemRefs.current[1].getBoundingClientRect().top - itemRefs.current[0].getBoundingClientRect().bottom;
+        const rect0 = itemRefs.current[0].getBoundingClientRect();
+        const rect1 = itemRefs.current[1].getBoundingClientRect();
+        if (isVertical) {
+          gap = rect1.top - rect0.bottom;
+        } else {
+          gap = rect1.left - rect0.right;
+        }
       }
       
+      const size = isVertical
+        ? (rect?.height || 100) + Math.max(0, gap)
+        : (rect?.width || 220) + Math.max(0, gap);
+
       setDragState({
         isDragging: true,
         idx: index,
         hoverIdx: index,
-        offsetY: 0,
-        itemHeight: (rect?.height || 100) + Math.max(0, gap)
+        dragOffset: 0,
+        itemSize: size
       });
       
       if (navigator.vibrate) navigator.vibrate(50);
-    }, 300);
+    }, holdDuration);
   };
 
   const handlePointerMove = (e, index) => {
@@ -64,15 +89,17 @@ export default function CityCardList({ savedZones, activeZoneId, onSelectZone, o
       return;
     }
     
-    const deltaY = e.clientY - startYRef.current;
+    const delta = isVertical
+      ? e.clientY - startYRef.current
+      : e.clientX - startXRef.current;
     
-    const offsetIndex = Math.round(deltaY / dragState.itemHeight);
+    const offsetIndex = Math.round(delta / dragState.itemSize);
     let newHoverIdx = dragState.idx + offsetIndex;
     newHoverIdx = Math.max(0, Math.min(newHoverIdx, savedZones.length - 1));
     
     setDragState(prev => ({
       ...prev,
-      offsetY: deltaY,
+      dragOffset: delta,
       hoverIdx: newHoverIdx
     }));
   };
@@ -87,26 +114,35 @@ export default function CityCardList({ savedZones, activeZoneId, onSelectZone, o
       if (dragState.hoverIdx !== null && dragState.hoverIdx !== dragState.idx) {
         if (onReorderZone) onReorderZone(dragState.idx, dragState.hoverIdx);
       }
-      setDragState({ isDragging: false, idx: null, hoverIdx: null, offsetY: 0, itemHeight: 0 });
+      setDragState({ isDragging: false, idx: null, hoverIdx: null, dragOffset: 0, itemSize: 0 });
     }
   };
 
   const handlePointerCancel = (e, index) => {
     clearTimeout(timerRef.current);
     if (dragState.isDragging) {
-      setDragState({ isDragging: false, idx: null, hoverIdx: null, offsetY: 0, itemHeight: 0 });
+      setDragState({ isDragging: false, idx: null, hoverIdx: null, dragOffset: 0, itemSize: 0 });
     }
   };
 
   const getTransform = (index) => {
-    if (!dragState.isDragging) return 'translateY(0)';
-    if (index === dragState.idx) return `translateY(${dragState.offsetY}px)`;
+    if (!dragState.isDragging) return 'none';
     
-    const { idx, hoverIdx, itemHeight } = dragState;
-    if (idx < hoverIdx && index > idx && index <= hoverIdx) return `translateY(-${itemHeight}px)`;
-    if (idx > hoverIdx && index >= hoverIdx && index < idx) return `translateY(${itemHeight}px)`;
+    const axis = isVertical ? 'Y' : 'X';
     
-    return 'translateY(0)';
+    if (index === dragState.idx) {
+      return `translate${axis}(${dragState.dragOffset}px)`;
+    }
+    
+    const { idx, hoverIdx, itemSize } = dragState;
+    if (idx < hoverIdx && index > idx && index <= hoverIdx) {
+      return `translate${axis}(-${itemSize}px)`;
+    }
+    if (idx > hoverIdx && index >= hoverIdx && index < idx) {
+      return `translate${axis}(${itemSize}px)`;
+    }
+    
+    return 'none';
   };
 
   const getZIndex = (index) => (dragState.isDragging && index === dragState.idx ? 10 : 1);
@@ -138,7 +174,7 @@ export default function CityCardList({ savedZones, activeZoneId, onSelectZone, o
               WebkitUserSelect: 'none',
               WebkitTouchCallout: 'none',
               position: 'relative',
-              touchAction: dragState.isDragging ? 'none' : 'pan-y'
+              touchAction: dragState.isDragging ? 'none' : (isVertical ? 'pan-y' : 'pan-x')
             }}
           >
             <CityCard 

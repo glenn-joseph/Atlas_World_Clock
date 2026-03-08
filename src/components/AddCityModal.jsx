@@ -91,7 +91,6 @@ export default function AddCityModal({ onClose, onAdd }) {
               onMouseLeave={e => e.currentTarget.style.backgroundColor = 'transparent'}
             >
               <span style={{ fontWeight: '500', fontSize: '1.05rem' }}>{city.name}</span>
-              <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>{city.zone}</span>
             </button>
           ))}
           {filtered.length === 0 && (

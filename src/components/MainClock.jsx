@@ -200,7 +200,7 @@ export default function MainClock({ activeZoneInfo, offsetMinutes = 0, setOffset
 
       {/* 1. Title Container */}
       <div className="mc-title">
-        <h1>{cityInfo}, <br/>{activeZoneInfo.zone.split('/')[0]}</h1>
+        <h1>{cityInfo}</h1>
       </div>
     </div>
   );
