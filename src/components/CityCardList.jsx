@@ -24,19 +24,40 @@ export default function CityCardList({ savedZones, activeZoneId, onSelectZone, o
     itemSize: 0
   });
 
+  // Use a ref to track dragging state for native event listeners (they can't read React state)
+  const isDraggingRef = useRef(false);
   const timerRef = useRef(null);
   const startXRef = useRef(0);
   const startYRef = useRef(0);
   const itemRefs = useRef([]);
+  const scrollContainerRef = useRef(null);
 
+  // Keep the ref in sync with state
+  useEffect(() => {
+    isDraggingRef.current = dragState.isDragging;
+  }, [dragState.isDragging]);
+
+  // Attach a native touchmove listener with { passive: false } to prevent page scroll during drag
+  useEffect(() => {
+    const container = scrollContainerRef.current;
+    if (!container) return;
+
+    const preventScroll = (e) => {
+      if (isDraggingRef.current) {
+        e.preventDefault();
+      }
+    };
+
+    container.addEventListener('touchmove', preventScroll, { passive: false });
+    return () => container.removeEventListener('touchmove', preventScroll);
+  }, []);
+
+  // Lock body scroll while dragging
   useEffect(() => {
     if (dragState.isDragging) {
-      const originalTouchAction = document.body.style.touchAction;
       const originalOverflow = document.body.style.overflow;
-      document.body.style.touchAction = 'none';
       document.body.style.overflow = 'hidden';
       return () => {
-        document.body.style.touchAction = originalTouchAction;
         document.body.style.overflow = originalOverflow;
       };
     }
@@ -155,7 +176,7 @@ export default function CityCardList({ savedZones, activeZoneId, onSelectZone, o
         </button>
       </div>
       
-      <div className="city-card-scroll">
+      <div className="city-card-scroll" ref={scrollContainerRef}>
         {savedZones.map((cityObj, index) => (
           <div
             key={cityObj.id}
@@ -174,7 +195,7 @@ export default function CityCardList({ savedZones, activeZoneId, onSelectZone, o
               WebkitUserSelect: 'none',
               WebkitTouchCallout: 'none',
               position: 'relative',
-              touchAction: dragState.isDragging ? 'none' : (isVertical ? 'pan-y' : 'pan-x')
+              touchAction: 'none'
             }}
           >
             <CityCard 
