@@ -80,7 +80,7 @@ export default function AddCityModal({ onClose, onAdd }) {
           {filtered.map(city => (
             <button 
               key={city.id}
-              onClick={() => { onAdd(city.zone); onClose(); }}
+              onClick={() => { onAdd({ id: city.id, zone: city.zone, name: city.name }); onClose(); }}
               style={{
                 display: 'flex', justifyContent: 'space-between', alignItems: 'center',
                 padding: '1rem', background: 'none', border: 'none',

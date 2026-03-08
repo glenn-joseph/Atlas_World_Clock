@@ -19,7 +19,7 @@ export default function CityCard({ cityObj, isActive, onClick, onRemove, offsetM
 
   return (
     <div className="city-card-item"
-      onClick={() => onClick(zone)}
+      onClick={() => onClick()}
       style={{
         backgroundColor: bg, color: color,
         cursor: 'pointer',
@@ -34,6 +34,7 @@ export default function CityCard({ cityObj, isActive, onClick, onRemove, offsetM
           <span style={{ color: secondaryColor, fontSize: '0.9rem' }}>{formatTimezoneOffset(offset)}</span>
           {onRemove && (
             <button 
+              onPointerDown={(e) => e.stopPropagation()}
               onClick={(e) => { e.stopPropagation(); onRemove(); }}
               className={`city-remove-btn ${isActive ? 'active' : ''}`}
               style={{
