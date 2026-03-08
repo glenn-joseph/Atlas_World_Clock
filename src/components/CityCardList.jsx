@@ -45,11 +45,15 @@ export default function CityCardList({ savedZones, activeZone, onSelectZone, off
             onDragStart={(e) => handleDragStart(e, index)}
             onDragEnd={handleDragEnd}
             onDragOver={(e) => handleDragOver(e, index)}
+            onDragEnter={(e) => e.preventDefault()}
             onDrop={(e) => handleDrop(e, index)}
             style={{ 
               display: 'flex', 
               transition: 'all 0.2s ease', 
-              cursor: draggedIdx !== null ? 'grabbing' : 'grab' 
+              cursor: draggedIdx !== null ? 'grabbing' : 'grab',
+              userSelect: 'none',
+              WebkitUserSelect: 'none',
+              WebkitTouchCallout: 'none'
             }}
           >
             <CityCard 
