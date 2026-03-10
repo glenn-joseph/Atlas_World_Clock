@@ -41,7 +41,7 @@ const EditableTimeSpan = ({ value, unit, onChange }) => {
         inputMode="numeric"
         pattern="[0-9]*"
         value={val}
-        onChange={(e) => setVal(e.target.value)}
+        onChange={(e) => setVal(e.target.value.replace(/\D/g, ''))}
         onBlur={commit}
         onKeyDown={handleKeyDown}
         style={{
