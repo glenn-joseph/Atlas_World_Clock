@@ -38,6 +38,8 @@ const EditableTimeSpan = ({ value, unit, onChange }) => {
       <input
         ref={inputRef}
         type="text"
+        inputMode="numeric"
+        pattern="[0-9]*"
         value={val}
         onChange={(e) => setVal(e.target.value)}
         onBlur={commit}
