@@ -6,7 +6,7 @@ const STORAGE_KEY = 'world_clock_zones_v4';
 const CITY_NAMES = {
   'America/Chicago': 'Chicago, USA',
   'America/New_York': 'New York, USA',
-  'America/Los_Angeles': 'Los Angeles, USA',
+  'America/Los_Angeles': 'Seattle, USA', // User preference for Seattle
   'Europe/London': 'London, UK',
   'Europe/Paris': 'Paris, France',
   'Asia/Tokyo': 'Tokyo, Japan',
@@ -39,10 +39,10 @@ export function useSavedTimezones() {
   const localZone = DateTime.local().zoneName;
   const localName = getLocalCityName(localZone);
   const defaultZones = [
-    { id: 'local_zone_active', zone: localZone, name: localName },
-    { id: 'new_york_usa', zone: 'America/New_York', name: 'New York, USA' },
-    { id: 'paris_france', zone: 'Europe/Paris', name: 'Paris, France' },
-    { id: 'tokyo_japan', zone: 'Asia/Tokyo', name: 'Tokyo, Japan' }
+    { id: 'local_zone_current', zone: localZone, name: `Current (${localName})` },
+    { id: 'london_uk', zone: 'Europe/London', name: 'London, UK' },
+    { id: 'tokyo_japan', zone: 'Asia/Tokyo', name: 'Tokyo, Japan' },
+    { id: 'new_york_usa', zone: 'America/New_York', name: 'New York, USA' }
   ];
 
   const [savedZones, setSavedZones] = useState(() => {
