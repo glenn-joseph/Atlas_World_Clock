@@ -1,13 +1,17 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, forwardRef, useImperativeHandle } from 'react';
 import { useTime } from '../hooks/useTime';
 import { getSunriseSunsetData, formatOffsetMinutes, getCityDisplayName } from '../utils/formatters';
 import { Sun } from 'lucide-react';
 import { DateTime } from 'luxon';
 
-const EditableTimeSpan = ({ value, unit, onChange }) => {
+const EditableTimeSpan = forwardRef(({ value, unit, onChange, onFocusNext }, ref) => {
   const [isEditing, setIsEditing] = useState(false);
   const [val, setVal] = useState(value);
   const inputRef = useRef(null);
+
+  useImperativeHandle(ref, () => ({
+    startEditing: () => setIsEditing(true)
+  }));
 
   useEffect(() => {
     if (isEditing && inputRef.current) {
@@ -18,15 +22,22 @@ const EditableTimeSpan = ({ value, unit, onChange }) => {
 
   useEffect(() => { setVal(value) }, [value]);
 
-  const commit = () => {
+  const commit = (moveNext = false) => {
     setIsEditing(false);
     if (val !== value) {
       onChange(unit, val);
     }
+    if (moveNext && onFocusNext) {
+      // Small timeout to allow the current input to unmount and the next one to mount its input
+      setTimeout(() => onFocusNext(), 50);
+    }
   };
 
   const handleKeyDown = (e) => {
-    if (e.key === 'Enter') commit();
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      commit(true);
+    }
     if (e.key === 'Escape') {
       setVal(value);
       setIsEditing(false);
@@ -42,7 +53,7 @@ const EditableTimeSpan = ({ value, unit, onChange }) => {
         pattern="[0-9]*"
         value={val}
         onChange={(e) => setVal(e.target.value.replace(/\D/g, ''))}
-        onBlur={commit}
+        onBlur={() => commit(false)}
         onKeyDown={handleKeyDown}
         style={{
           background: 'transparent',
@@ -88,9 +99,11 @@ const EditableTimeSpan = ({ value, unit, onChange }) => {
       {value}
     </span>
   );
-};
+});
 
 export default function MainClock({ activeZoneInfo, offsetMinutes = 0, setOffsetMinutes, use24HourTime, onToggle24Hour }) {
+  const minutesRef = useRef(null);
+  
   const time = useTime(activeZoneInfo.zone, offsetMinutes);
   const details = getSunriseSunsetData(activeZoneInfo.zone);
   const cityInfo = activeZoneInfo.name;
@@ -136,9 +149,19 @@ export default function MainClock({ activeZoneInfo, offsetMinutes = 0, setOffset
       {/* 2. Time Container */}
       <div className="mc-time">
         <div className="mc-time-text">
-          <EditableTimeSpan value={hours} unit="hours" onChange={handleTimeChange} />
+          <EditableTimeSpan 
+            value={hours} 
+            unit="hours" 
+            onChange={handleTimeChange} 
+            onFocusNext={() => minutesRef.current?.startEditing()}
+          />
           <span className="animate-blink" style={{ margin: '0 0.5rem', fontWeight: '400' }}>:</span>
-          <EditableTimeSpan value={time.toFormat('mm')} unit="minutes" onChange={handleTimeChange} />
+          <EditableTimeSpan 
+            ref={minutesRef}
+            value={time.toFormat('mm')} 
+            unit="minutes" 
+            onChange={handleTimeChange} 
+          />
           <span className="animate-blink" style={{ margin: '0 0.5rem', fontWeight: '400' }}>:</span>
           <span>{time.toFormat('ss')}</span>
         </div>
