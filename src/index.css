@@ -148,7 +148,7 @@ input[type=range]::-webkit-slider-runnable-track {
   padding: 0.5rem 1.5rem; border-radius: 100px;
   margin-bottom: 0.5rem; color: var(--text-main);
 }
-.schedule-bar-left { display: flex; align-items: center; gap: 0.8rem; font-weight: 500; width: 180px; }
+.schedule-bar-left { display: flex; align-items: center; gap: 0.6rem; font-weight: 700; width: 180px; }
 .schedule-bar-slider-container { position: relative; flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 0.5rem; height: auto; min-height: 48px; }
 .schedule-current-label {
   font-size: 0.75rem; color: var(--text-secondary); font-weight: 500;
@@ -233,15 +233,15 @@ input[type=range]::-webkit-slider-runnable-track {
     background-color: transparent;
     padding: 0;
     flex-direction: column;
-    gap: 0.5rem;
-    margin-bottom: 2rem;
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
   }
   .schedule-bar-left {
-    background-color: var(--surface-light);
+    background-color: transparent;
     width: 100%;
     justify-content: center;
-    padding: 0.8rem;
-    border-radius: 100px;
+    padding: 0;
+    border-radius: 0;
   }
   .schedule-bar-slider-container {
     background-color: var(--surface-light);

@@ -1,5 +1,4 @@
-import React from 'react';
-import { Calendar, RotateCcw } from 'lucide-react';
+import { Globe, RotateCcw } from 'lucide-react';
 import { formatOffsetMinutes } from '../utils/formatters';
 
 export default function ScheduleBar({ offsetMinutes, setOffsetMinutes }) {
@@ -8,8 +7,8 @@ export default function ScheduleBar({ offsetMinutes, setOffsetMinutes }) {
   return (
     <div className="schedule-bar-container">
       <div className="schedule-bar-left">
-        <Calendar size={18} />
-        <span>Atlas</span>
+        <Globe size={18} color="#C23B06" fill="#C23B06" fillOpacity={0.1} />
+        <span style={{ letterSpacing: '0.1em', fontWeight: '700' }}>ATLAS</span>
       </div>
       
       <div className="schedule-bar-slider-container">
